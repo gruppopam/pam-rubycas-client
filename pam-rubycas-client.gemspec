@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["matt@soupmatt.com"]
   gem.summary = %q{Client library for the Central Authentication Service (CAS) protocol.}
   gem.description = %q{Client library for the Central Authentication Service (CAS) protocol.}
-  gem.homepage = "https://github.com/rubycas/rubycas-client"
+  gem.homepage = "https://github.com/rubycas/pam-rubycas-client"
   gem.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "rubycas-client"
+  gem.name          = "pam-rubycas-client"
   gem.require_paths = ["lib"]
 
   gem.add_dependency("activesupport")

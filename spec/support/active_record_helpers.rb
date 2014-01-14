@@ -28,7 +28,7 @@ module ActiveRecordHelpers
       add_index :sessions, :session_id
       add_index :sessions, :updated_at
 
-      #column added to sessions table by rubycas-client
+      #column added to sessions table by pam-rubycas-client
       add_column :sessions, :service_ticket, :string
       add_index :sessions, :service_ticket
 

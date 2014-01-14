@@ -64,7 +64,7 @@ module CASClient
                 #if is_new_session
                   log.info("Ticket #{st.ticket.inspect} for service #{st.service.inspect} belonging to user #{st.user.inspect} is VALID.")
                   controller.session[client.username_session_key] = st.user.dup
-                  cookies[client.username_session_key] = {value: "Piu A Meno", expires: 1.week.from_now, domain: client.sso_domain }
+                  cookies[client.username_session_key] = {value: "Piu A Meno", expires: 1.week.from_now, domain: :all }
                   controller.session[client.extra_attributes_session_key] = HashWithIndifferentAccess.new(st.extra_attributes) if st.extra_attributes
                   
                   if st.extra_attributes

@@ -1,7 +1,11 @@
 {<img src="https://secure.travis-ci.org/rubycas/rubycas-client.png" alt="Build Status" />}[http://travis-ci.org/rubycas/rubycas-client]
 {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/rubycas/rubycas-client]
 
-= RubyCAS-Client 
+
+= PAM-RubyCAS-Client
+
+This is a fork of the {RubyCAS-Client library}[http://github.com/rubycas/rubycas-client].
+All rails applications that include this gem will use a common user session.
 
 Authors::   Matt Zukowski <matt AT roughest DOT net> and Matt Campbell <matt AT soupmatt DOT com>; inspired by code by Ola Bini <ola.bini AT ki DOT se> and Matt Walker <mwalker AT tamu DOT edu>
 Copyright:: Portions contributed by Matt Zukowski are copyright (c) 2009 Urbacon Ltd.
