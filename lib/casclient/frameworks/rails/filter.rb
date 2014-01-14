@@ -14,6 +14,8 @@ module CASClient
         class << self
           def filter(controller)
             raise "Cannot use the CASClient filter because it has not yet been configured." if config.nil?
+
+            cookies = controller.send(:cookies)
             
             if @@fake_user
               controller.session[client.username_session_key] = @@fake_user
@@ -41,8 +43,8 @@ module CASClient
               log.warn("Re-using previously validated ticket since the ticket id and service are the same.")
               return true
             elsif last_st &&
-                !config[:authenticate_on_every_request] && 
-                controller.session[client.username_session_key]
+                !config[:authenticate_on_every_request] &&
+                cookies[client.username_session_key]
               # Re-use the previous ticket if the user already has a local CAS session (i.e. if they were already
               # previously authenticated for this service). This is to prevent redirection to the CAS server on every
               # request.
@@ -62,6 +64,7 @@ module CASClient
                 #if is_new_session
                   log.info("Ticket #{st.ticket.inspect} for service #{st.service.inspect} belonging to user #{st.user.inspect} is VALID.")
                   controller.session[client.username_session_key] = st.user.dup
+                  cookies[client.username_session_key] = {value: "Piu A Meno", expires: 1.week.from_now, domain: client.sso_domain }
                   controller.session[client.extra_attributes_session_key] = HashWithIndifferentAccess.new(st.extra_attributes) if st.extra_attributes
                   
                   if st.extra_attributes
@@ -210,10 +213,12 @@ module CASClient
           # If given, the optional <tt>service</tt> URL overrides 
           # <tt>request.referer</tt>.
           def logout(controller, service = nil)
+            cookies = controller.send(:cookies)
             referer = service || controller.request.referer
             st = controller.session[:cas_last_valid_ticket]
             @@client.ticket_store.cleanup_service_session_lookup(st) if st
             controller.send(:reset_session)
+            cookies.delete client.username_session_key
             controller.send(:redirect_to, client.logout_url(referer))
           end
           
