@@ -64,7 +64,7 @@ module CASClient
                 #if is_new_session
                   log.info("Ticket #{st.ticket.inspect} for service #{st.service.inspect} belonging to user #{st.user.inspect} is VALID.")
                   controller.session[client.username_session_key] = st.user.dup
-                  cookies[client.username_session_key] = {value: "Piu A Meno", expires: 1.week.from_now, domain: sso_cookie(controller) }
+                  cookies[client.username_session_key] = {value: "Piu A Meno", expires: 1.week.from_now, domain: :all }
                   controller.session[client.extra_attributes_session_key] = HashWithIndifferentAccess.new(st.extra_attributes) if st.extra_attributes
                   
                   if st.extra_attributes
@@ -218,13 +218,8 @@ module CASClient
             st = controller.session[:cas_last_valid_ticket]
             @@client.ticket_store.cleanup_service_session_lookup(st) if st
             controller.send(:reset_session)
-            cookies.delete client.username_session_key, domain: sso_cookie(controller)
+            cookies.delete client.username_session_key, domain: :all
             controller.send(:redirect_to, client.logout_url(referer))
-          end
-
-          def sso_cookie(controller)
-            return controller.request.domain if controller.request.subdomains.empty?
-            ".#{controller.request.domain}"
           end
           
           def unauthorized!(controller, vr = nil)
