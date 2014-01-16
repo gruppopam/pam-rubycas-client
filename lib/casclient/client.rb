@@ -7,7 +7,6 @@ module CASClient
     attr_reader :proxy_host, :proxy_port
     attr_writer :login_url, :validate_url, :proxy_url, :logout_url, :service_url
     attr_accessor :proxy_callback_url, :proxy_retrieval_url
-    attr_reader :domain
 
     def initialize(conf = nil)
       configure(conf) if conf
@@ -32,7 +31,6 @@ module CASClient
       @validate_url = conf[:validate_url]
       @proxy_url    = conf[:proxy_url]
       @service_url  = conf[:service_url]
-      @domain       = conf[:domain]
       @force_ssl_verification  = conf[:force_ssl_verification]
       @proxy_callback_url  = conf[:proxy_callback_url]
 
