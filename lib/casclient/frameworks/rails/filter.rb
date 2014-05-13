@@ -272,7 +272,7 @@ module CASClient
             controller.session[:previous_redirect_to_cas] = Time.now
             
             log.debug("Redirecting to #{redirect_url.inspect}")
-            controller.send(:redirect_to, redirect_url)
+            controller.send(:redirect_to, redirect_url,{source: 'redirect_to_cas'})
           end
           
           private
@@ -352,6 +352,16 @@ module CASClient
         def self.use_gatewaying?
           return true unless @@config[:use_gatewaying] == false
         end
+      end
+    end
+  end
+
+  module Redirection
+    def redirect_to(options = {}, response_status = {})
+      if request.xhr? && response_status[:source] == 'redirect_to_cas'
+        render :js => "window.location = '/'" #redirect to login_page
+      else
+        super(options, response_status)
       end
     end
   end
