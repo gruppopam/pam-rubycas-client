@@ -13,7 +13,14 @@ end
 
 $: << File.expand_path(File.dirname(__FILE__))
 
+
 module CASClient
+
+  module Rails
+    class Engine < ::Rails::Engine
+    end
+  end
+
   class CASException < Exception
   end
 
@@ -25,18 +32,18 @@ module CASClient
       @default_formatter = Formatter.new
       super
     end
-  
+
     def format_message(severity, datetime, progrname, msg)
       (@formatter || @default_formatter).call(severity, datetime, progname, msg)
     end
-    
+
     def break
       self << $/
     end
-    
+
     class Formatter < ::Logger::Formatter
       Format = "[%s#%d] %5s -- %s: %s\n"
-      
+
       def call(severity, time, progname, msg)
         Format % [format_datetime(time), $$, severity, progname, msg2str(msg)]
       end
