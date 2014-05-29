@@ -235,7 +235,7 @@ module CASClient
                 when :xml
                   controller.send(:render, :xml => { :error => vr.failure_message }.to_xml(:root => 'errors'), :status => :unauthorized)
                 when :json
-                  controller.send(:render, :json => { :errors => { :error => vr.failure_message }}, :status => :unauthorized)
+                  controller.send(:render, :json => { :errors => { :error => vr.failure_message }, :source => 'redirect_to_cas'}, :status => :unauthorized)
                 end
               else
                 controller.send(:head, :unauthorized)
@@ -357,9 +357,17 @@ module CASClient
   end
 
   module Redirection
+    def ajax_redirect_to(url)
+      head 302, x_ajax_redirect_url: url
+    end
+
     def redirect_to(options = {}, response_status = {})
-      if request.xhr? && response_status[:source] == 'redirect_to_cas'
-        render :js => "window.location = '/'" #redirect to login_page
+      if request.xhr?
+          if response_status[:source] == 'redirect_to_cas'
+            render :js => "window.location = '/'" #redirect to login_page
+          else
+            ajax_redirect_to('/')
+          end
       else
         super(options, response_status)
       end
