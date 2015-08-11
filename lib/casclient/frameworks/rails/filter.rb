@@ -12,6 +12,11 @@ module CASClient
         @@fake_extra_attributes = nil
 
         class << self
+
+          def before(controller)
+            self.filter controller
+          end
+
           def filter(controller)
             raise "Cannot use the CASClient filter because it has not yet been configured." if config.nil?
 
@@ -44,7 +49,7 @@ module CASClient
               return true
             elsif last_st &&
                 !config[:authenticate_on_every_request] &&
-                cookies[client.username_session_key]
+                    cookies[client.username_session_key]
               # Re-use the previous ticket if the user already has a local CAS session (i.e. if they were already
               # previously authenticated for this service). This is to prevent redirection to the CAS server on every
               # request.
